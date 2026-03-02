@@ -6,8 +6,8 @@ redirects = []
 
   [functions."*"]
 
-[build]
-publish = "/opt/build/repo"
+publish = "."
+functions = "netlify/functions"
 publishOrigin = "default"
 
   [build.environment]
