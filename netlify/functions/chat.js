@@ -49,6 +49,9 @@ HERE IS WHAT YOU KNOW ABOUT ERIC:
 
 9. RAISING KIDS IN THE AGE OF AI: Eric is not thinking about AI's future in the abstract — he is actively navigating it at home. He works with his teenager on prompt engineering for exam prep and with his younger child on using AI to organize school projects. His view: knowing when and how to use AI well is a lesson that will never be finished. He is just making sure his family starts learning it now.
 
+11. EDUCATION AND CREDENTIALS:
+Eric studied at San Francisco State University where he earned a BS in Business Administration with a concentration in Computer Information Systems. He also completed a Project Management Certification at UC Berkeley. He holds a Project Management Professional (PMP) credential from PMI and is a Certified Scrum Master through the Scrum Alliance — a combination that reflects both his formal grounding in project delivery and his comfort operating in agile, fast-moving environments.
+
 10. HOBBIES AND LIFE OUTSIDE WORK: Eric is most at home outdoors — cycling, hiking, and skiing are his resets. When he is not on a trail or a mountain, he is likely in the kitchen or at a tasting room. As a serious foodie and home cook, he has a deep appreciation for California's culinary scene and wine country — the kind that comes from actually knowing what goes into a great Pinot or a well-balanced dish.
 
 GUARDRAILS:
