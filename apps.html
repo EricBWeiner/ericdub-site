@@ -433,36 +433,6 @@
   }
   .btn-pdf:hover { border-color: var(--accent); color: var(--accent); }
 
-  @media print {
-    body * { visibility: hidden; }
-    #printReport, #printReport * { visibility: visible; }
-    #printReport {
-      position: fixed; inset: 0;
-      background: #fff; color: #000;
-      font-family: 'Instrument Sans', sans-serif;
-      padding: 48px 56px; font-size: 13px; line-height: 1.6;
-    }
-    .print-header { margin-bottom: 32px; border-bottom: 1px solid #ccc; padding-bottom: 16px; }
-    .print-app-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 300; margin-bottom: 4px; }
-    .print-creator { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #888; text-transform: uppercase; }
-    .print-section-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #c25b2a; margin: 24px 0 8px; }
-    .print-inputs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px 24px; margin-bottom: 8px; }
-    .print-input-item { font-size: 12px; }
-    .print-input-label { color: #888; font-size: 10px; }
-    .print-cards-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 8px; }
-    .print-card { border-left: 2px solid #c25b2a; padding-left: 12px; }
-    .print-card-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #c25b2a; margin-bottom: 4px; }
-    .print-card-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; font-weight: 300; margin-bottom: 6px; }
-    .print-card-body { font-size: 12px; color: #444; }
-    .print-card-body ul { list-style: none; padding: 0; }
-    .print-card-body li { padding-left: 14px; position: relative; margin-bottom: 3px; }
-    .print-card-body li::before { content: '-'; position: absolute; left: 0; color: #c25b2a; }
-    .print-workflow { margin-top: 8px; }
-    .print-wf-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 12px; }
-    .print-wf-type { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #888; min-width: 80px; padding-top: 2px; }
-    .print-wf-text { color: #222; }
-    .print-footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #eee; font-family: 'DM Mono', monospace; font-size: 9px; color: #aaa; letter-spacing: 0.1em; }
-  }
   .generating-state {
     display: flex; align-items: center; gap: 16px;
     padding: 40px 0;
@@ -1034,57 +1004,134 @@ function downloadPDF() {
   const issues  = document.getElementById('input-issues').value;
   const trend   = document.getElementById('input-trend').value;
 
+  // Build score grid data (mirrors radar logic)
+  const trendScore   = { declining: 15, flat: 50, improving: 80, surging: 95 }[trend] || 50;
+  const activityScore = Math.round(Math.max(0, 100 - (parseInt(days) / 180 * 100)));
+  const renewalScore  = Math.round(Math.max(0, Math.min(100, (parseInt(renewal) / 365) * 100)));
+  const revenueScore  = Math.round(Math.min(100, (parseInt(revenue) / 500) * 100));
+  const issuesScore   = Math.round(Math.min(100, parseInt(issues) * 8));
+
+  function scoreBar(val, invert) {
+    const pct = invert ? val : val;
+    const filled = Math.round(pct / 10);
+    const color = invert
+      ? (val >= 70 ? '#b91c1c' : val >= 40 ? '#b45309' : '#166534')
+      : (val >= 70 ? '#166534' : val >= 40 ? '#b45309' : '#b91c1c');
+    let bars = '';
+    for (let i = 0; i < 10; i++) {
+      bars += `<span style="display:inline-block;width:18px;height:8px;margin-right:2px;background:${i < filled ? color : '#e5e7eb'};border-radius:1px;"></span>`;
+    }
+    return `<div style="margin-top:4px;">${bars}</div>`;
+  }
+
+  const scores = [
+    { label: 'Health Score',      val: parseInt(health),  invert: false, display: `${health}/100` },
+    { label: 'Activity',          val: activityScore,      invert: false, display: `${days} days inactive` },
+    { label: 'Time Buffer',       val: renewalScore,       invert: false, display: `${renewal} days to renewal` },
+    { label: 'Revenue Exposure',  val: revenueScore,       invert: true,  display: `$${revenue}K at risk` },
+    { label: 'Open Issues',       val: issuesScore,        invert: true,  display: `${issues} open` },
+    { label: 'Momentum',          val: trendScore,         invert: false, display: trend.charAt(0).toUpperCase() + trend.slice(1) },
+  ];
+
+  let scoresHTML = '';
+  scores.forEach(s => {
+    scoresHTML += `
+      <div style="padding:10px 0;border-bottom:1px solid #f0ede9;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
+          <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;">${s.label}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:#2a2318;font-weight:500;">${s.display}</span>
+        </div>
+        ${scoreBar(s.val, s.invert)}
+      </div>`;
+  });
+
+  // Cards
   const cards = document.querySelectorAll('#textOutputGrid .output-card');
   let cardsHTML = '';
   cards.forEach(card => {
     const label = card.querySelector('.output-card-n')?.textContent || '';
     const title = card.querySelector('.output-card-title')?.textContent || '';
-    const body  = card.querySelector('.output-card-body')?.innerHTML || '';
-    cardsHTML += `<div class="print-card">
-      <div class="print-card-label">${label}</div>
-      <div class="print-card-title">${title}</div>
-      <div class="print-card-body">${body}</div>
-    </div>`;
+    const items = card.querySelectorAll('.output-card-body li');
+    let listHTML = '';
+    items.forEach(li => {
+      listHTML += `<div style="padding-left:14px;position:relative;margin-bottom:5px;font-size:12px;color:#3d3128;line-height:1.5;">
+        <span style="position:absolute;left:0;color:#a0522d;">–</span>${li.textContent}
+      </div>`;
+    });
+    cardsHTML += `
+      <div style="border-left:2px solid #a0522d;padding-left:14px;margin-bottom:20px;">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#a0522d;margin-bottom:4px;">${label}</div>
+        <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;font-weight:300;margin-bottom:8px;color:#1a150f;">${title}</div>
+        ${listHTML}
+      </div>`;
   });
 
+  // Workflow
   const wfNodes = document.querySelectorAll('#workflowFlow .wf-node');
   let wfHTML = '';
+  const typeColors = { automation: '#a0522d', email: '#2d6a4f', action: '#1e4d7b', human: '#6b2d5e', workflow: '#4b4035' };
   wfNodes.forEach(node => {
-    const type  = node.querySelector('.wf-type')?.textContent || '';
-    const title = node.querySelector('.wf-title')?.textContent || '';
-    const detail= node.querySelector('.wf-detail')?.textContent || '';
-    wfHTML += `<div class="print-wf-item">
-      <span class="print-wf-type">${type}</span>
-      <span class="print-wf-text"><strong>${title}</strong> — ${detail}</span>
-    </div>`;
+    const type   = node.querySelector('.wf-type')?.textContent?.trim() || '';
+    const title  = node.querySelector('.wf-title')?.textContent || '';
+    const detail = node.querySelector('.wf-detail')?.textContent || '';
+    const color  = typeColors[type.toLowerCase()] || '#4b4035';
+    wfHTML += `
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0ede9;">
+        <div style="min-width:80px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:${color};padding-top:2px;">${type}</div>
+        <div style="font-size:13px;color:#1a150f;line-height:1.5;"><strong>${title}</strong> &mdash; <span style="color:#5c4e3f;">${detail}</span></div>
+      </div>`;
   });
 
   const now = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  document.getElementById('printReport').innerHTML = `
-    <div class="print-header">
-      <div class="print-app-name">Ops Scenario Planner</div>
-      <div class="print-creator">Built by Eric Weiner &nbsp;·&nbsp; ericdub.com &nbsp;·&nbsp; Generated ${now}</div>
-    </div>
-    <div class="print-section-title">Scenario Inputs</div>
-    <div class="print-inputs-grid">
-      <div class="print-input-item"><div class="print-input-label">Health Score</div>${health}/100</div>
-      <div class="print-input-item"><div class="print-input-label">Days Since Last Active</div>${days} days</div>
-      <div class="print-input-item"><div class="print-input-label">Days to Renewal</div>${renewal} days</div>
-      <div class="print-input-item"><div class="print-input-label">Revenue at Risk</div>$${revenue}K</div>
-      <div class="print-input-item"><div class="print-input-label">Open Issues</div>${issues}</div>
-      <div class="print-input-item"><div class="print-input-label">Engagement Trend</div>${trend.charAt(0).toUpperCase() + trend.slice(1)}</div>
-    </div>
-    <div class="print-section-title">Assessment</div>
-    <div class="print-cards-grid">${cardsHTML}</div>
-    <div class="print-section-title">Recommended Workflow</div>
-    <div class="print-workflow">${wfHTML}</div>
-    <div class="print-footer">Ops Scenario Planner &nbsp;·&nbsp; Eric Weiner &nbsp;·&nbsp; ericdub.com &nbsp;·&nbsp; Powered by Claude</div>
-  `;
+  const printHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ops Scenario Planner — Eric Weiner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; color: #2a2318; font-family: 'Instrument Sans', sans-serif; font-size: 13px; line-height: 1.6; padding: 52px 56px; }
+  @media print {
+    body { padding: 32px 40px; }
+    @page { margin: 0.5in; size: letter portrait; }
+  }
+  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 36px; font-weight: 300; margin-bottom: 6px; color: #1a150f; }
+  .creator { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6b5e4f; margin-bottom: 24px; }
+  hr { border: none; border-top: 1px solid #d9d0c6; margin-bottom: 28px; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #a0522d; margin-bottom: 14px; margin-top: 28px; display: block; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; }
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e5e0d8; font-family: 'DM Mono', monospace; font-size: 9px; color: #9c8e7e; letter-spacing: 0.1em; text-align: center; }
+</style>
+</head>
+<body>
+<h1>Ops Scenario Planner</h1>
+<div class="creator">Built by Eric Weiner &nbsp;&middot;&nbsp; ericdub.com &nbsp;&middot;&nbsp; Generated ${now}</div>
+<hr>
+<span class="section-label">Scenario Inputs</span>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px 24px;margin-bottom:8px;">
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Health Score</div><strong>${health}/100</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Days Since Last Active</div><strong>${days} days</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Days to Renewal</div><strong>${renewal} days</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Revenue at Risk</div><strong>$${revenue}K</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Open Issues</div><strong>${issues}</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Engagement Trend</div><strong>${trend.charAt(0).toUpperCase() + trend.slice(1)}</strong></div>
+</div>
+<span class="section-label">Account Health Profile</span>
+${scoresHTML}
+<span class="section-label">Assessment</span>
+<div class="two-col">${cardsHTML}</div>
+<span class="section-label">Recommended Workflow</span>
+${wfHTML}
+<div class="footer">Ops Scenario Planner &nbsp;&middot;&nbsp; Eric Weiner &nbsp;&middot;&nbsp; ericdub.com &nbsp;&middot;&nbsp; Powered by Claude</div>
+<script>window.onload = function() { window.print(); };<\/script>
+</body>
+</html>`;
 
-  document.getElementById('printReport').style.display = 'block';
-  window.print();
-  document.getElementById('printReport').style.display = 'none';
+  const printWin = window.open('', '_blank', 'width=900,height=700');
+  printWin.document.write(printHTML);
+  printWin.document.close();
 }
 
 function logOpsInteraction(inputs) {
