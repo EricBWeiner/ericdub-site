@@ -113,6 +113,27 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-links a.nav-apps {
+    color: var(--accent);
+    border: 1px solid rgba(var(--ar),var(--ag),var(--ab),0.4);
+    padding: 4px 10px;
+    letter-spacing: 0.12em;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .nav-links a.nav-apps:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .nav-apps-dot {
+    display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent); margin-right: 5px;
+    vertical-align: middle; position: relative; top: -1px;
+    animation: navpulse 2s ease-in-out infinite;
+  }
+  @keyframes navpulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
 
   /* HERO */
   .hero {
@@ -576,6 +597,7 @@
     <li><a href="#metrics">Impact</a></li>
     <li><a href="#about">Philosophy</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="apps.html" class="nav-apps"><span class="nav-apps-dot"></span>Custom Apps</a></li>
   </ul>
 </nav>
 
