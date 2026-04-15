@@ -109,6 +109,13 @@
     transition: color 0.2s;
   }
   .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  .nav-links a.nav-apps-active {
+    color: #fff;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    letter-spacing: 0.12em;
+  }
 
   /* PAGE HEADER */
   .page-header {
@@ -414,7 +421,48 @@
   .output-card-body li { padding-left: 16px; position: relative; }
   .output-card-body li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 11px; }
 
-  /* LOADING STATE */
+  .btn-pdf {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 14px; background: transparent;
+    border: 1px solid var(--border); cursor: pointer;
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-muted); margin-left: 16px;
+    transition: border-color 0.2s, color 0.2s;
+    vertical-align: middle;
+  }
+  .btn-pdf:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media print {
+    body * { visibility: hidden; }
+    #printReport, #printReport * { visibility: visible; }
+    #printReport {
+      position: fixed; inset: 0;
+      background: #fff; color: #000;
+      font-family: 'Instrument Sans', sans-serif;
+      padding: 48px 56px; font-size: 13px; line-height: 1.6;
+    }
+    .print-header { margin-bottom: 32px; border-bottom: 1px solid #ccc; padding-bottom: 16px; }
+    .print-app-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 300; margin-bottom: 4px; }
+    .print-creator { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #888; text-transform: uppercase; }
+    .print-section-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #c25b2a; margin: 24px 0 8px; }
+    .print-inputs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px 24px; margin-bottom: 8px; }
+    .print-input-item { font-size: 12px; }
+    .print-input-label { color: #888; font-size: 10px; }
+    .print-cards-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 8px; }
+    .print-card { border-left: 2px solid #c25b2a; padding-left: 12px; }
+    .print-card-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #c25b2a; margin-bottom: 4px; }
+    .print-card-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; font-weight: 300; margin-bottom: 6px; }
+    .print-card-body { font-size: 12px; color: #444; }
+    .print-card-body ul { list-style: none; padding: 0; }
+    .print-card-body li { padding-left: 14px; position: relative; margin-bottom: 3px; }
+    .print-card-body li::before { content: '-'; position: absolute; left: 0; color: #c25b2a; }
+    .print-workflow { margin-top: 8px; }
+    .print-wf-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 12px; }
+    .print-wf-type { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #888; min-width: 80px; padding-top: 2px; }
+    .print-wf-text { color: #222; }
+    .print-footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #eee; font-family: 'DM Mono', monospace; font-size: 9px; color: #aaa; letter-spacing: 0.1em; }
+  }
   .generating-state {
     display: flex; align-items: center; gap: 16px;
     padding: 40px 0;
@@ -526,8 +574,8 @@
     <li><a href="index.html#experience">Experience</a></li>
     <li><a href="index.html#metrics">Impact</a></li>
     <li><a href="index.html#about">Philosophy</a></li>
-    <li><a href="apps.html" class="active">Custom Apps</a></li>
     <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="apps.html" class="nav-apps-active">Custom Apps</a></li>
   </ul>
 </nav>
 
@@ -544,7 +592,6 @@
   <div class="app-featured reveal">
     <div class="app-featured-header">
       <div class="app-featured-meta">
-        <div class="app-tag">◈ &nbsp; Live Tool</div>
         <h2 class="app-name">Ops Scenario <em>Planner</em></h2>
         <p class="app-desc">Enter account or operational metrics and generate a structured assessment with escalation paths, automation triggers, and a recommended workflow — powered by Claude.</p>
       </div>
@@ -654,7 +701,7 @@
       <!-- Output -->
       <div class="output-section" id="outputSection">
         <hr class="output-divider">
-        <div class="output-label">Assessment Output</div>
+        <div class="output-label">Assessment Output <button class="btn-pdf" onclick="downloadPDF()">&#8595; Download PDF Report</button></div>
 
         <!-- Visuals -->
         <div class="visuals-row">
@@ -691,6 +738,22 @@
     Built with intention by Eric Weiner &nbsp;·&nbsp; Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude</a>
   </div>
 </div>
+
+<!-- Hidden Print Report -->
+<div id="printReport" style="display:none;"></div>
+
+<!-- Netlify Form: Ops Scenario Interactions -->
+<form name="ops-scenario-interactions" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="ops-scenario-interactions">
+  <input type="text" name="health">
+  <input type="text" name="days">
+  <input type="text" name="renewal">
+  <input type="text" name="revenue">
+  <input type="text" name="issues">
+  <input type="text" name="trend">
+  <input type="text" name="timestamp">
+  <input type="text" name="bot-field">
+</form>
 
 <script>
 // THEMES
@@ -788,14 +851,14 @@ function drawRadar(health, days, renewal, revenue, issues, trend) {
   const daysScore  = Math.max(0, 100 - (days / 180 * 100));
   const renewalScore = Math.max(0, Math.min(100, (renewal / 365) * 100));
   const revenueScore = Math.min(100, (revenue / 500) * 100);
-  const issuesScore  = Math.max(0, 100 - (issues * 12));
+  const issuesScore  = Math.min(100, issues * 8);
 
   const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
 
   radarChartInstance = new Chart(ctx, {
     type: 'radar',
     data: {
-      labels: ['Health', 'Activity', 'Time Buffer', 'Revenue Exposure', 'Issue Load', 'Momentum'],
+      labels: ['Health', 'Activity', 'Time Buffer', 'Revenue Exposure', 'Open Issues', 'Momentum'],
       datasets: [{
         data: [health, Math.round(daysScore), Math.round(renewalScore), Math.round(revenueScore), Math.round(issuesScore), Math.round(trendScore)],
         backgroundColor: accentColor + '22',
@@ -819,7 +882,20 @@ function drawRadar(health, days, renewal, revenue, issues, trend) {
           angleLines: { color: 'rgba(0,0,0,0.06)' },
         }
       },
-      plugins: { legend: { display: false } }
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.parsed.r;
+              if (label === 'Open Issues') return `Open Issues: ${value} (higher = more issues)`;
+              if (label === 'Revenue Exposure') return `Revenue Exposure: ${value} (higher = more at risk)`;
+              return `${label}: ${value}`;
+            }
+          }
+        }
+      }
     }
   });
 }
@@ -919,6 +995,7 @@ Make the workflow nodes varied in type — use a mix of automation, email, actio
     drawRadar(health, days, renewal, revenue, issues, trend);
     renderWorkflow(parsed.workflow || []);
     renderTextCards(parsed.cards || []);
+    logOpsInteraction({ health, days, renewal, revenue, issues, trend });
 
     document.getElementById('generatingState').style.display = 'none';
     document.getElementById('outputSection').classList.add('visible');
@@ -947,6 +1024,86 @@ function resetTool() {
   document.getElementById('input-trend').value = 'declining';
   document.getElementById('outputSection').classList.remove('visible');
   if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
+}
+
+function downloadPDF() {
+  const health  = document.getElementById('input-health').value;
+  const days    = document.getElementById('input-days').value;
+  const renewal = document.getElementById('input-renewal').value;
+  const revenue = document.getElementById('input-revenue').value;
+  const issues  = document.getElementById('input-issues').value;
+  const trend   = document.getElementById('input-trend').value;
+
+  const cards = document.querySelectorAll('#textOutputGrid .output-card');
+  let cardsHTML = '';
+  cards.forEach(card => {
+    const label = card.querySelector('.output-card-n')?.textContent || '';
+    const title = card.querySelector('.output-card-title')?.textContent || '';
+    const body  = card.querySelector('.output-card-body')?.innerHTML || '';
+    cardsHTML += `<div class="print-card">
+      <div class="print-card-label">${label}</div>
+      <div class="print-card-title">${title}</div>
+      <div class="print-card-body">${body}</div>
+    </div>`;
+  });
+
+  const wfNodes = document.querySelectorAll('#workflowFlow .wf-node');
+  let wfHTML = '';
+  wfNodes.forEach(node => {
+    const type  = node.querySelector('.wf-type')?.textContent || '';
+    const title = node.querySelector('.wf-title')?.textContent || '';
+    const detail= node.querySelector('.wf-detail')?.textContent || '';
+    wfHTML += `<div class="print-wf-item">
+      <span class="print-wf-type">${type}</span>
+      <span class="print-wf-text"><strong>${title}</strong> — ${detail}</span>
+    </div>`;
+  });
+
+  const now = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  document.getElementById('printReport').innerHTML = `
+    <div class="print-header">
+      <div class="print-app-name">Ops Scenario Planner</div>
+      <div class="print-creator">Built by Eric Weiner &nbsp;·&nbsp; ericdub.com &nbsp;·&nbsp; Generated ${now}</div>
+    </div>
+    <div class="print-section-title">Scenario Inputs</div>
+    <div class="print-inputs-grid">
+      <div class="print-input-item"><div class="print-input-label">Health Score</div>${health}/100</div>
+      <div class="print-input-item"><div class="print-input-label">Days Since Last Active</div>${days} days</div>
+      <div class="print-input-item"><div class="print-input-label">Days to Renewal</div>${renewal} days</div>
+      <div class="print-input-item"><div class="print-input-label">Revenue at Risk</div>$${revenue}K</div>
+      <div class="print-input-item"><div class="print-input-label">Open Issues</div>${issues}</div>
+      <div class="print-input-item"><div class="print-input-label">Engagement Trend</div>${trend.charAt(0).toUpperCase() + trend.slice(1)}</div>
+    </div>
+    <div class="print-section-title">Assessment</div>
+    <div class="print-cards-grid">${cardsHTML}</div>
+    <div class="print-section-title">Recommended Workflow</div>
+    <div class="print-workflow">${wfHTML}</div>
+    <div class="print-footer">Ops Scenario Planner &nbsp;·&nbsp; Eric Weiner &nbsp;·&nbsp; ericdub.com &nbsp;·&nbsp; Powered by Claude</div>
+  `;
+
+  document.getElementById('printReport').style.display = 'block';
+  window.print();
+  document.getElementById('printReport').style.display = 'none';
+}
+
+function logOpsInteraction(inputs) {
+  try {
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'form-name': 'ops-scenario-interactions',
+        'health':    inputs.health,
+        'days':      inputs.days,
+        'renewal':   inputs.renewal,
+        'revenue':   inputs.revenue,
+        'issues':    inputs.issues,
+        'trend':     inputs.trend,
+        'timestamp': new Date().toISOString()
+      }).toString()
+    });
+  } catch {}
 }
 </script>
 </body>

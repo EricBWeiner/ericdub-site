@@ -115,24 +115,20 @@
   .nav-links a:hover { color: var(--accent); }
   .nav-links a.nav-apps {
     color: var(--accent);
-    border: 1px solid rgba(var(--ar),var(--ag),var(--ab),0.4);
+    border: 1px solid rgba(var(--ar),var(--ag),var(--ab),0.5);
     padding: 4px 10px;
     letter-spacing: 0.12em;
-    transition: color 0.2s, background 0.2s, border-color 0.2s;
+    animation: navboxpulse 2s ease-in-out infinite;
   }
   .nav-links a.nav-apps:hover {
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
+    animation: none;
   }
-  .nav-apps-dot {
-    display: inline-block; width: 5px; height: 5px; border-radius: 50%;
-    background: var(--accent); margin-right: 5px;
-    vertical-align: middle; position: relative; top: -1px;
-    animation: navpulse 2s ease-in-out infinite;
-  }
-  @keyframes navpulse {
-    0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+  @keyframes navboxpulse {
+    0%,100% { background: transparent; border-color: rgba(var(--ar),var(--ag),var(--ab),0.5); }
+    50%      { background: rgba(var(--ar),var(--ag),var(--ab),0.12); border-color: rgba(var(--ar),var(--ag),var(--ab),1); }
   }
 
   /* HERO */
@@ -597,7 +593,7 @@
     <li><a href="#metrics">Impact</a></li>
     <li><a href="#about">Philosophy</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="apps.html" class="nav-apps"><span class="nav-apps-dot"></span>Custom Apps</a></li>
+    <li><a href="apps.html" class="nav-apps">Custom Apps</a></li>
   </ul>
 </nav>
 
@@ -609,11 +605,7 @@
     <p class="hero-eyebrow">Customer Experience Leader &nbsp;·&nbsp; San Francisco Bay Area</p>
     <h1 class="hero-name">Eric<br><em>Weiner</em></h1>
     <p class="hero-sub">Building the teams, systems, and strategies that turn customers into advocates and revenue into growth.</p>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-n">10+</span><span class="stat-l">Years SaaS</span></div>
-      <div class="stat"><span class="stat-n">95%</span><span class="stat-l">Peak Renewal Rate</span></div>
-      <div class="stat"><span class="stat-n">105%</span><span class="stat-l">ARR Target Achieved</span></div>
-    </div>
+
   </div>
   <div class="scroll-cue">
     <span>Scroll</span>
@@ -631,7 +623,7 @@
     <div class="card reveal"><div class="card-ico">◈</div><h3 class="card-ttl">Customer Success Leadership</h3><p class="card-dsc">Building and scaling distributed CS organizations: CSMs, Account Managers, L&amp;D, and Support, aligned across Product, Sales, and Executive leadership.</p></div>
     <div class="card reveal"><div class="card-ico">◎</div><h3 class="card-ttl">Pre-Sales Solutioning</h3><p class="card-dsc">Bridging buyer outcomes and drivers with technical complexities by leading high-profile solution consulting engagements, scopings, and coaching teams translating challenges into compelling solution narratives.</p></div>
     <div class="card reveal"><div class="card-ico">↗</div><h3 class="card-ttl">Go-to-Market &amp; Revenue Strategy</h3><p class="card-dsc">Contributing to Go-to-Market strategy across value proposition, customer segmentation, and growth metrics, while owning the full customer lifecycle from pre-sales through renewal with playbooks that consistently exceed ARR and retention targets.</p></div>
-    <div class="card reveal"><div class="card-ico">⊹</div><h3 class="card-ttl">AI-Enabled Operations</h3><p class="card-dsc">Building AI-powered service delivery frameworks and toolsets that create new revenue opportunities, while driving internal workflow efficiency through AI-supported operations, enabling teams to move faster, reduce manual overhead, and focus on high-value strategic work.</p></div>
+    <div class="card reveal"><div class="card-ico">⊹</div><h3 class="card-ttl">AI-Enabled Operations</h3><p class="card-dsc">Built AI-powered internal tooling platforms using Cursor, GitHub, and API integrations — enabling teams to deploy bespoke reporting, workflow automation, and outcome-tracking applications without engineering cycles. Integrated Planhat, HubSpot, Pendo, and Power BI into unified operational layers with automated lifecycle signals and real-time dashboards. See it live on the <a href="apps.html" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(var(--ar),var(--ag),var(--ab),0.3);">Custom Apps</a> page.</p></div>
   </div>
 </section>
 
@@ -658,10 +650,10 @@
         </div>
         <div class="blurb-block">
           <span class="blurb-label">My Part</span>
-          <p>Over 10 years and five progressive roles, I owned the SLED vertical end-to-end, building and leading the customer organization responsible for ensuring State, Local, and Education government agencies realized measurable value from the platform. My scope extended well beyond post-sale: partnering with Sales, Product, and Executive leadership on Go-to-Market strategy including value proposition development, customer segmentation, and growth metrics, while overseeing pre-sales solution scoping, Solutions Consulting, and coaching the team on translating complex FP&A and budget challenges into compelling platform narratives. From onboarding the company's largest state-level deployment to pioneering an AI-enabled service delivery framework, my work translated platform capability into outcomes: driving 90%+ renewal rates, exceeding ARR targets, and scaling a team that became the connective tissue between what government customers needed and what the product became.</p>
+          <p>Over 10 years and five progressive roles, I owned the State &amp; Local Government vertical end-to-end — building the customer organization, driving renewal rates, and exceeding ARR targets. My scope extended well beyond post-sales: I partnered on Go-to-Market strategies, led pre-sales solution scoping, and served as the connective tissue between what customers needed and what the product became. As VP over CS, I shifted focus toward operational infrastructure and AI-enabled tooling — integrating Planhat CSP, HubSpot CRM, Pendo, and more into a unified ops layer with automated lifecycle signals, health scoring playbooks, and real-time dashboards. I also collaborated with Product and DevOps to build the company's first AI-powered internal tooling platform using Cursor and GitHub, enabling key team members to deploy bespoke client-facing and internal applications without waiting on product roadmaps.</p>
         </div>
       </div>
-      <div class="job-tag">◈ &nbsp;10 years &nbsp;·&nbsp; 5 progressive roles &nbsp;·&nbsp; Private-to-PE-backed Growth</div>
+      <div class="job-tag">◈ &nbsp;10 years &nbsp;·&nbsp; 5 progressive roles &nbsp;·&nbsp; AI Tooling &nbsp;·&nbsp; Ops Platform Development &nbsp;·&nbsp; Private-to-PE-backed Growth</div>
     </div>
 
     <div class="job">
