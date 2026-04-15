@@ -1012,16 +1012,13 @@ function downloadPDF() {
   const issuesScore   = Math.round(Math.min(100, parseInt(issues) * 8));
 
   function scoreBar(val, invert) {
-    const pct = invert ? val : val;
-    const filled = Math.round(pct / 10);
     const color = invert
       ? (val >= 70 ? '#b91c1c' : val >= 40 ? '#b45309' : '#166534')
       : (val >= 70 ? '#166534' : val >= 40 ? '#b45309' : '#b91c1c');
-    let bars = '';
-    for (let i = 0; i < 10; i++) {
-      bars += `<span style="display:inline-block;width:18px;height:8px;margin-right:2px;background:${i < filled ? color : '#e5e7eb'};border-radius:1px;"></span>`;
-    }
-    return `<div style="margin-top:4px;">${bars}</div>`;
+    const pct = Math.min(100, Math.max(0, val));
+    return `<div style="margin-top:6px;height:8px;width:100%;background:#e5e7eb;border-radius:2px;overflow:hidden;">
+      <div style="height:8px;width:${pct}%;background:${color};border-radius:2px;"></div>
+    </div>`;
   }
 
   const scores = [
@@ -1125,7 +1122,7 @@ ${scoresHTML}
 <span class="section-label">Recommended Workflow</span>
 ${wfHTML}
 <div class="footer">Ops Scenario Planner &nbsp;&middot;&nbsp; Eric Weiner &nbsp;&middot;&nbsp; ericdub.com &nbsp;&middot;&nbsp; Powered by Claude</div>
-<script>window.onload = function() { window.print(); };<\/script>
+<script>window.onload = function() { setTimeout(function(){ window.print(); }, 600); };<\/script>
 </body>
 </html>`;
 
