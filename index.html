@@ -16,21 +16,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eric Weiner — Customer Experience Leader</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f0eb;
-    --surface: #ede7e0;
-    --border: #d9d0c6;
-    --accent: #c25b2a;
-    --ar: 194; --ag: 91; --ab: 42;
-    --accent-dim: rgba(194,91,42,0.1);
-    --text: #2a2318;
-    --text-muted: #8c7d6e;
-    --text-mid: #5c4e3f;
-    --serif: 'Cormorant Garamond', Georgia, serif;
+    --bg: #FAFAFA;
+    --surface: #F2F4F7;
+    --border: #E4E7EC;
+    --accent: #1B3A6B;
+    --ar: 27; --ag: 58; --ab: 107;
+    --accent-dim: rgba(27,58,107,0.08);
+    --text: #111827;
+    --text-muted: #6B7280;
+    --text-mid: #374151;
+    --serif: 'DM Serif Display', Georgia, serif;
     --mono: 'DM Mono', monospace;
-    --sans: 'Instrument Sans', sans-serif;
+    --sans: 'Inter', sans-serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,7 +51,7 @@
     content: '';
     position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 9000; opacity: 0.5;
+    pointer-events: none; z-index: 9000; opacity: 0.15;
   }
 
   /* CURSOR */
@@ -63,7 +64,7 @@
   }
   #cursor-ring {
     position: fixed; width: 34px; height: 34px;
-    border: 1.5px solid rgba(194,91,42,0.4);
+    border: 1.5px solid rgba(27,58,107,0.35);
     border-radius: 50%; pointer-events: none; z-index: 9998;
     transform: translate(-50%,-50%);
     transition: width 0.3s, height 0.3s;
@@ -88,18 +89,16 @@
   }
   .swatch:hover { transform: scale(1.25); }
   .swatch.active { border-color: var(--text); }
-  .swatch[data-t="terracotta"] { background: #c25b2a; }
-  .swatch[data-t="slate"]      { background: #3d5a6e; }
-  .swatch[data-t="forest"]     { background: #3a6b4a; }
-  .swatch[data-t="plum"]       { background: #7b3d6e; }
-  .swatch[data-t="navy"]       { background: #243d6b; }
+  .swatch[data-t="navy"]   { background: #1B3A6B; }
+  .swatch[data-t="sage"]   { background: #2F6B5A; }
+  .swatch[data-t="amber"]  { background: #B5710E; }
 
   /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
     padding: 20px 48px;
-    background: linear-gradient(to bottom, rgba(245,240,235,0.96) 0%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(250,250,250,0.97) 0%, transparent 100%);
     backdrop-filter: blur(4px);
   }
   .nav-brand {
@@ -113,23 +112,6 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--accent); }
-  .nav-links a.nav-apps {
-    color: var(--accent);
-    border: 1px solid rgba(var(--ar),var(--ag),var(--ab),0.5);
-    padding: 4px 10px;
-    letter-spacing: 0.12em;
-    animation: navboxpulse 2s ease-in-out infinite;
-  }
-  .nav-links a.nav-apps:hover {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-    animation: none;
-  }
-  @keyframes navboxpulse {
-    0%,100% { background: transparent; border-color: rgba(var(--ar),var(--ag),var(--ab),0.5); }
-    50%      { background: rgba(var(--ar),var(--ag),var(--ab),0.12); border-color: rgba(var(--ar),var(--ag),var(--ab),1); }
-  }
 
   /* HERO */
   .hero {
@@ -234,8 +216,6 @@
   .card:hover .card-ico { color: rgba(255,255,255,0.65); }
   .card:hover .card-ttl { color: #fff; }
   .card:hover .card-dsc { color: rgba(255,255,255,0.75); }
-  .card-apps-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(var(--ar),var(--ag),var(--ab),0.3); transition: color 0.3s, border-color 0.3s; }
-  .card:hover .card-apps-link { color: #fff; border-bottom-color: rgba(255,255,255,0.5); }
 
   /* TIMELINE */
   .tl { position: relative; padding-left: 2px; }
@@ -388,7 +368,7 @@
   .hidden { display: none; }
   .modal-overlay {
     position: fixed; inset: 0; z-index: 8000;
-    background: rgba(42,35,24,0.6);
+    background: rgba(17,24,39,0.55);
     backdrop-filter: blur(6px);
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
@@ -579,10 +559,9 @@
 <!-- Theme Switcher -->
 <div class="theme-switcher">
   <div class="swatches">
-    <div class="swatch active" data-t="terracotta" title="Terracotta"></div>
-    <div class="swatch" data-t="slate"   title="Slate Blue"></div>
-    <div class="swatch" data-t="forest"  title="Forest"></div>
-    <div class="swatch" data-t="plum"    title="Plum"></div>
+    <div class="swatch active" data-t="navy"  title="Navy"></div>
+    <div class="swatch" data-t="sage"   title="Sage"></div>
+    <div class="swatch" data-t="amber"  title="Amber"></div>
   </div>
 </div>
 
@@ -595,7 +574,6 @@
     <li><a href="#metrics">Impact</a></li>
     <li><a href="#about">Philosophy</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="apps.html" class="nav-apps">Custom Apps</a></li>
   </ul>
 </nav>
 
@@ -607,7 +585,11 @@
     <p class="hero-eyebrow">Customer Experience Leader &nbsp;·&nbsp; San Francisco Bay Area</p>
     <h1 class="hero-name">Eric<br><em>Weiner</em></h1>
     <p class="hero-sub">Building the teams, systems, and strategies that turn customers into advocates and revenue into growth.</p>
-
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">10+</span><span class="stat-l">Years SaaS</span></div>
+      <div class="stat"><span class="stat-n">95%</span><span class="stat-l">Peak Renewal Rate</span></div>
+      <div class="stat"><span class="stat-n">105%</span><span class="stat-l">ARR Target Achieved</span></div>
+    </div>
   </div>
   <div class="scroll-cue">
     <span>Scroll</span>
@@ -625,7 +607,7 @@
     <div class="card reveal"><div class="card-ico">◈</div><h3 class="card-ttl">Customer Success Leadership</h3><p class="card-dsc">Building and scaling distributed CS organizations: CSMs, Account Managers, L&amp;D, and Support, aligned across Product, Sales, and Executive leadership.</p></div>
     <div class="card reveal"><div class="card-ico">◎</div><h3 class="card-ttl">Pre-Sales Solutioning</h3><p class="card-dsc">Bridging buyer outcomes and drivers with technical complexities by leading high-profile solution consulting engagements, scopings, and coaching teams translating challenges into compelling solution narratives.</p></div>
     <div class="card reveal"><div class="card-ico">↗</div><h3 class="card-ttl">Go-to-Market &amp; Revenue Strategy</h3><p class="card-dsc">Contributing to Go-to-Market strategy across value proposition, customer segmentation, and growth metrics, while owning the full customer lifecycle from pre-sales through renewal with playbooks that consistently exceed ARR and retention targets.</p></div>
-    <div class="card reveal"><div class="card-ico">⊹</div><h3 class="card-ttl">AI-Enabled Operations</h3><p class="card-dsc">Built AI-powered internal tooling platforms using Cursor, GitHub, and API integrations — enabling teams to deploy bespoke reporting, workflow automation, and outcome-tracking applications without engineering cycles. Integrated Planhat, HubSpot, Pendo, and Power BI into unified operational layers with automated lifecycle signals and real-time dashboards. See it live on the <a href="apps.html" class="card-apps-link">Custom Apps</a> page.</p></div>
+    <div class="card reveal"><div class="card-ico">⊹</div><h3 class="card-ttl">AI-Enabled Operations</h3><p class="card-dsc">Building AI-powered service delivery frameworks and toolsets that create new revenue opportunities, while driving internal workflow efficiency through AI-supported operations, enabling teams to move faster, reduce manual overhead, and focus on high-value strategic work.</p></div>
   </div>
 </section>
 
@@ -652,10 +634,10 @@
         </div>
         <div class="blurb-block">
           <span class="blurb-label">My Part</span>
-          <p>Over 10 years and five progressive roles, I owned the State &amp; Local Government vertical end-to-end — building the customer organization, driving renewal rates, and exceeding ARR targets. My scope extended well beyond post-sales: I partnered on Go-to-Market strategies, led pre-sales solution scoping, and served as the connective tissue between what customers needed and what the product became. As VP over CS, I shifted focus toward operational infrastructure and AI-enabled tooling — integrating Planhat CSP, HubSpot CRM, Pendo, and more into a unified ops layer with automated lifecycle signals, health scoring playbooks, and real-time dashboards. I also collaborated with Product and DevOps to build the company's first AI-powered internal tooling platform using Cursor and GitHub, enabling key team members to deploy bespoke client-facing and internal applications without waiting on product roadmaps.</p>
+          <p>Over 10 years and five progressive roles, I owned the SLED vertical end-to-end, building and leading the customer organization responsible for ensuring State, Local, and Education government agencies realized measurable value from the platform. My scope extended well beyond post-sale: partnering with Sales, Product, and Executive leadership on Go-to-Market strategy including value proposition development, customer segmentation, and growth metrics, while overseeing pre-sales solution scoping, Solutions Consulting, and coaching the team on translating complex FP&A and budget challenges into compelling platform narratives. From onboarding the company's largest state-level deployment to pioneering an AI-enabled service delivery framework, my work translated platform capability into outcomes: driving 90%+ renewal rates, exceeding ARR targets, and scaling a team that became the connective tissue between what government customers needed and what the product became.</p>
         </div>
       </div>
-      <div class="job-tag">◈ &nbsp;10 years &nbsp;·&nbsp; 5 progressive roles &nbsp;·&nbsp; AI Tooling &nbsp;·&nbsp; Ops Platform Development &nbsp;·&nbsp; Private-to-PE-backed Growth</div>
+      <div class="job-tag">◈ &nbsp;10 years &nbsp;·&nbsp; 5 progressive roles &nbsp;·&nbsp; Private-to-PE-backed Growth</div>
     </div>
 
     <div class="job">
@@ -777,11 +759,9 @@
 <script>
 // THEMES
 const THEMES = {
-  terracotta: [194, 91,  42,  '#c25b2a'],
-  slate:      [61,  90,  110, '#3d5a6e'],
-  forest:     [58,  107, 74,  '#3a6b4a'],
-  plum:       [123, 61,  110, '#7b3d6e'],
-  navy:       [36,  61,  107, '#243d6b'],
+  navy:  [27,  58,  107, '#1B3A6B'],
+  sage:  [47,  107, 90,  '#2F6B5A'],
+  amber: [181, 113, 14,  '#B5710E'],
 };
 
 function applyTheme(name) {

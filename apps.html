@@ -15,22 +15,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Custom Apps — Eric Weiner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f5f0eb;
-    --surface: #ede7e0;
-    --border: #d9d0c6;
-    --accent: #c25b2a;
-    --ar: 194; --ag: 91; --ab: 42;
-    --accent-dim: rgba(194,91,42,0.1);
-    --text: #2a2318;
-    --text-muted: #8c7d6e;
-    --text-mid: #5c4e3f;
-    --serif: 'Cormorant Garamond', Georgia, serif;
+    --bg: #FAFAFA;
+    --surface: #F2F4F7;
+    --border: #E4E7EC;
+    --accent: #1B3A6B;
+    --ar: 27; --ag: 58; --ab: 107;
+    --accent-dim: rgba(27,58,107,0.08);
+    --text: #111827;
+    --text-muted: #6B7280;
+    --text-mid: #374151;
+    --serif: 'DM Serif Display', Georgia, serif;
     --mono: 'DM Mono', monospace;
-    --sans: 'Instrument Sans', sans-serif;
+    --sans: 'Inter', sans-serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,7 +51,7 @@
     content: '';
     position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 9000; opacity: 0.5;
+    pointer-events: none; z-index: 9000; opacity: 0.15;
   }
 
   /* CURSOR */
@@ -63,7 +64,7 @@
   }
   #cursor-ring {
     position: fixed; width: 34px; height: 34px;
-    border: 1.5px solid rgba(194,91,42,0.4);
+    border: 1.5px solid rgba(27,58,107,0.35);
     border-radius: 50%; pointer-events: none; z-index: 9998;
     transform: translate(-50%,-50%);
     transition: width 0.3s, height 0.3s;
@@ -84,17 +85,16 @@
   }
   .swatch:hover { transform: scale(1.25); }
   .swatch.active { border-color: var(--text); }
-  .swatch[data-t="terracotta"] { background: #c25b2a; }
-  .swatch[data-t="slate"]      { background: #3d5a6e; }
-  .swatch[data-t="forest"]     { background: #3a6b4a; }
-  .swatch[data-t="plum"]       { background: #7b3d6e; }
+  .swatch[data-t="navy"]   { background: #1B3A6B; }
+  .swatch[data-t="sage"]   { background: #2F6B5A; }
+  .swatch[data-t="amber"]  { background: #B5710E; }
 
   /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
     padding: 20px 48px;
-    background: linear-gradient(to bottom, rgba(245,240,235,0.96) 0%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(250,250,250,0.97) 0%, transparent 100%);
     backdrop-filter: blur(4px);
   }
   .nav-brand {
@@ -286,7 +286,7 @@
     letter-spacing: 0.08em; padding: 10px 14px; outline: none; width: 100%;
     transition: border-color 0.2s; border-radius: 0; cursor: pointer;
     -webkit-appearance: none; appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238c7d6e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 14px center;
     padding-right: 36px;
   }
@@ -365,11 +365,11 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; font-size: 14px; position: relative; z-index: 1;
   }
-  .wf-dot.automation { background: rgba(var(--ar),var(--ag),var(--ab),0.12); color: var(--accent); border: 1.5px solid rgba(var(--ar),var(--ag),var(--ab),0.3); }
-  .wf-dot.email      { background: rgba(58,107,74,0.1); color: #3a6b4a; border: 1.5px solid rgba(58,107,74,0.3); }
-  .wf-dot.action     { background: rgba(61,90,110,0.1); color: #3d5a6e; border: 1.5px solid rgba(61,90,110,0.3); }
-  .wf-dot.human      { background: rgba(123,61,110,0.1); color: #7b3d6e; border: 1.5px solid rgba(123,61,110,0.3); }
-  .wf-dot.workflow   { background: rgba(42,35,24,0.07); color: var(--text-mid); border: 1.5px solid var(--border); }
+  .wf-dot.automation { background: rgba(var(--ar),var(--ag),var(--ab),0.10); color: var(--accent); border: 1.5px solid rgba(var(--ar),var(--ag),var(--ab),0.25); }
+  .wf-dot.email      { background: rgba(47,107,90,0.10); color: #2F6B5A; border: 1.5px solid rgba(47,107,90,0.25); }
+  .wf-dot.action     { background: rgba(61,90,138,0.10); color: #3D5A8A; border: 1.5px solid rgba(61,90,138,0.25); }
+  .wf-dot.human      { background: rgba(99,60,140,0.10); color: #633C8C; border: 1.5px solid rgba(99,60,140,0.25); }
+  .wf-dot.workflow   { background: rgba(17,24,39,0.06); color: var(--text-mid); border: 1.5px solid var(--border); }
   .wf-body { padding: 8px 0 24px; }
   .wf-type {
     font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
@@ -388,10 +388,10 @@
     width: 10px; height: 10px; border-radius: 50%;
   }
   .legend-dot.automation { background: rgba(var(--ar),var(--ag),var(--ab),0.5); }
-  .legend-dot.email      { background: rgba(58,107,74,0.5); }
-  .legend-dot.action     { background: rgba(61,90,110,0.5); }
-  .legend-dot.human      { background: rgba(123,61,110,0.5); }
-  .legend-dot.workflow   { background: rgba(42,35,24,0.25); }
+  .legend-dot.email      { background: rgba(47,107,90,0.5); }
+  .legend-dot.action     { background: rgba(61,90,138,0.5); }
+  .legend-dot.human      { background: rgba(99,60,140,0.5); }
+  .legend-dot.workflow   { background: rgba(17,24,39,0.2); }
   .legend-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; }
 
   /* TEXT OUTPUT GRID */
@@ -529,10 +529,9 @@
 <!-- Theme Switcher -->
 <div class="theme-switcher">
   <div class="swatches">
-    <div class="swatch active" data-t="terracotta" title="Terracotta"></div>
-    <div class="swatch" data-t="slate"   title="Slate Blue"></div>
-    <div class="swatch" data-t="forest"  title="Forest"></div>
-    <div class="swatch" data-t="plum"    title="Plum"></div>
+    <div class="swatch active" data-t="navy"  title="Navy"></div>
+    <div class="swatch" data-t="sage"   title="Sage"></div>
+    <div class="swatch" data-t="amber"  title="Amber"></div>
   </div>
 </div>
 
@@ -728,10 +727,9 @@
 <script>
 // THEMES
 const THEMES = {
-  terracotta: [194, 91,  42,  '#c25b2a'],
-  slate:      [61,  90,  110, '#3d5a6e'],
-  forest:     [58,  107, 74,  '#3a6b4a'],
-  plum:       [123, 61,  110, '#7b3d6e'],
+  navy:  [27,  58,  107, '#1B3A6B'],
+  sage:  [47,  107, 90,  '#2F6B5A'],
+  amber: [181, 113, 14,  '#B5710E'],
 };
 
 function applyTheme(name) {
@@ -847,7 +845,7 @@ function drawRadar(health, days, renewal, revenue, issues, trend) {
           grid: { color: 'rgba(0,0,0,0.08)' },
           pointLabels: {
             font: { family: 'DM Mono', size: 9 },
-            color: '#8c7d6e',
+            color: '#6B7280',
           },
           angleLines: { color: 'rgba(0,0,0,0.06)' },
         }
@@ -1038,10 +1036,10 @@ function downloadPDF() {
   let scoresHTML = '';
   scores.forEach(s => {
     scoresHTML += `
-      <div style="padding:10px 0;border-bottom:1px solid #f0ede9;">
+      <div style="padding:10px 0;border-bottom:1px solid #E4E7EC;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
-          <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;">${s.label}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:11px;color:#2a2318;font-weight:500;">${s.display}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;">${s.label}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:#111827;font-weight:500;">${s.display}</span>
         </div>
         ${scoreBar(s.val, s.invert)}
       </div>`;
@@ -1056,14 +1054,14 @@ function downloadPDF() {
     const items = card.querySelectorAll('.output-card-body li');
     let listHTML = '';
     items.forEach(li => {
-      listHTML += `<div style="padding-left:14px;position:relative;margin-bottom:5px;font-size:12px;color:#3d3128;line-height:1.5;">
-        <span style="position:absolute;left:0;color:#a0522d;">–</span>${li.textContent}
+      listHTML += `<div style="padding-left:14px;position:relative;margin-bottom:5px;font-size:12px;color:#374151;line-height:1.5;">
+        <span style="position:absolute;left:0;color:#1B3A6B;">–</span>${li.textContent}
       </div>`;
     });
     cardsHTML += `
-      <div style="border-left:2px solid #a0522d;padding-left:14px;margin-bottom:20px;">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#a0522d;margin-bottom:4px;">${label}</div>
-        <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;font-weight:300;margin-bottom:8px;color:#1a150f;">${title}</div>
+      <div style="border-left:2px solid #1B3A6B;padding-left:14px;margin-bottom:20px;">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#1B3A6B;margin-bottom:4px;">${label}</div>
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:300;margin-bottom:8px;color:#111827;">${title}</div>
         ${listHTML}
       </div>`;
   });
@@ -1071,7 +1069,7 @@ function downloadPDF() {
   // Workflow
   const wfNodes = document.querySelectorAll('#workflowFlow .wf-node');
   let wfHTML = '';
-  const typeColors = { automation: '#a0522d', email: '#2d6a4f', action: '#1e4d7b', human: '#6b2d5e', workflow: '#4b4035' };
+  const typeColors = { automation: '#1B3A6B', email: '#2F6B5A', action: '#3D5A8A', human: '#633C8C', workflow: '#374151' };
   wfNodes.forEach(node => {
     const type   = node.querySelector('.wf-type')?.textContent?.trim() || '';
     const title  = node.querySelector('.wf-title')?.textContent || '';
@@ -1080,7 +1078,7 @@ function downloadPDF() {
     wfHTML += `
       <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0ede9;">
         <div style="min-width:80px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:${color};padding-top:2px;">${type}</div>
-        <div style="font-size:13px;color:#1a150f;line-height:1.5;"><strong>${title}</strong> &mdash; <span style="color:#5c4e3f;">${detail}</span></div>
+        <div style="font-size:13px;color:#111827;line-height:1.5;"><strong>${title}</strong> &mdash; <span style="color:#6B7280;">${detail}</span></div>
       </div>`;
   });
 
@@ -1091,20 +1089,20 @@ function downloadPDF() {
 <head>
 <meta charset="UTF-8">
 <title>Ops Scenario Planner — Eric Weiner</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #fff; color: #2a2318; font-family: 'Instrument Sans', sans-serif; font-size: 13px; line-height: 1.6; padding: 52px 56px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #fff; color: #111827; font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.6; padding: 52px 56px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   @media print {
     body { padding: 32px 40px; }
     @page { margin: 0.5in; size: letter portrait; }
   }
-  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 36px; font-weight: 300; margin-bottom: 6px; color: #1a150f; }
-  .creator { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6b5e4f; margin-bottom: 24px; }
-  hr { border: none; border-top: 1px solid #d9d0c6; margin-bottom: 28px; }
-  .section-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #a0522d; margin-bottom: 14px; margin-top: 28px; display: block; }
+  h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 36px; font-weight: 300; margin-bottom: 6px; color: #111827; }
+  .creator { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6B7280; margin-bottom: 24px; }
+  hr { border: none; border-top: 1px solid #E4E7EC; margin-bottom: 28px; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #1B3A6B; margin-bottom: 14px; margin-top: 28px; display: block; }
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; }
-  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e5e0d8; font-family: 'DM Mono', monospace; font-size: 9px; color: #9c8e7e; letter-spacing: 0.1em; text-align: center; }
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #E4E7EC; font-family: 'DM Mono', monospace; font-size: 9px; color: #6B7280; letter-spacing: 0.1em; text-align: center; }
 </style>
 </head>
 <body>
@@ -1113,12 +1111,12 @@ function downloadPDF() {
 <hr>
 <span class="section-label">Scenario Inputs</span>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px 24px;margin-bottom:8px;">
-  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Health Score</div><strong>${health}/100</strong></div>
-  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Days Since Last Active</div><strong>${days} days</strong></div>
-  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Days to Renewal</div><strong>${renewal} days</strong></div>
-  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Revenue at Risk</div><strong>$${revenue}K</strong></div>
-  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Open Issues</div><strong>${issues}</strong></div>
-  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5e4f;margin-bottom:3px;">Engagement Trend</div><strong>${trend.charAt(0).toUpperCase() + trend.slice(1)}</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;margin-bottom:3px;">Health Score</div><strong>${health}/100</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;margin-bottom:3px;">Days Since Last Active</div><strong>${days} days</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;margin-bottom:3px;">Days to Renewal</div><strong>${renewal} days</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;margin-bottom:3px;">Revenue at Risk</div><strong>$${revenue}K</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;margin-bottom:3px;">Open Issues</div><strong>${issues}</strong></div>
+  <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6B7280;margin-bottom:3px;">Engagement Trend</div><strong>${trend.charAt(0).toUpperCase() + trend.slice(1)}</strong></div>
 </div>
 <span class="section-label">Account Health Profile</span>
 ${scoresHTML}
